@@ -418,7 +418,6 @@ module God
         Array(condition.info).each do |condition_info|
           messages << "#{watch.name} #{status} #{condition_info} (#{condition.base_name})"
           status == '[trigger]' ? applog(watch, :warn, messages.last) : applog(watch, :info, messages.last)
-          
         end
       else
         messages << "#{watch.name} #{status} (#{condition.base_name})"
