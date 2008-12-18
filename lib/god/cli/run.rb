@@ -73,6 +73,11 @@ module God
           BleakHouseDiagnostic.install
         end
         
+        # respect --no-syslog even if we're running in front, which is a requirement for launchd on Mac OS X
+        unless @options[:syslog]
+          Logger.syslog = false
+        end
+
         default_run
         
         log_file = God.log_file
