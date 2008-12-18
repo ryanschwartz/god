@@ -4,6 +4,10 @@ module God
     class Run
       def initialize(options)
         @options = options
+
+        unless @options[:syslog]
+          Logger.syslog = false
+        end
         
         dispatch
       end
@@ -73,11 +77,6 @@ module God
           BleakHouseDiagnostic.install
         end
         
-        # respect --no-syslog even if we're running in front, which is a requirement for launchd on Mac OS X
-        unless @options[:syslog]
-          Logger.syslog = false
-        end
-
         default_run
         
         log_file = God.log_file
@@ -112,10 +111,6 @@ module God
             # set pid if requested
             if @options[:pid] # and as deamon
               God.pid = @options[:pid] 
-            end
-            
-            unless @options[:syslog]
-              Logger.syslog = false
             end
             
             default_run
