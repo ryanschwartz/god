@@ -142,7 +142,7 @@
 
 * Minor Enhancement
   * Allow extra args to pass through to config file
-  
+
 == 0.5.1 / 2007-10-08
 
 * Bug Fixes
