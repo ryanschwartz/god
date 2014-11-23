@@ -1,16 +1,16 @@
 god
     by Tom Preston-Werner
        Kevin Clark (kqueue/netlink support)
-       
+
     http://god.rubyforge.org
 
 == DESCRIPTION:
-  
-God is an easy to configure, easy to extend monitoring framework written 
+
+God is an easy to configure, easy to extend monitoring framework written
 in Ruby.
 
-Keeping your server processes and tasks running should be a simple part of 
-your deployment process. God aims to be the simplest, most powerful 
+Keeping your server processes and tasks running should be a simple part of
+your deployment process. God aims to be the simplest, most powerful
 monitoring application available.
 
 == DOCUMENTATION:
@@ -24,7 +24,7 @@ Sign up for the god mailing list at http://groups.google.com/group/god-rb
 == INSTALL:
 
   $ sudo gem install god
-  
+
 == CONTRIBUTE:
 
 Latest code is available at http://github.com/mojombo/god

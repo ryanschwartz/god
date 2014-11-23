@@ -11,7 +11,7 @@ class TestEmail < Test::Unit::TestCase
       God::Contacts::Email.any_instance.expects(:notify_sendmail).never
       God::Contacts::Email.delivery_method = :foo_protocol
       LOG.expects(:log).times(2)
- 
+
       g = God::Contacts::Email.new
       g.notify(:a, :b, :c, :d, :e)
       assert_nil g.info
@@ -29,7 +29,7 @@ class TestEmail < Test::Unit::TestCase
       assert_equal "sent email to joe@example.com", g.info
     end
   end
-  
+
   def test_sendmail_delivery_method_for_notify
     assert_nothing_raised do
       God::Contacts::Email.any_instance.expects(:notify_smtp).never
@@ -41,5 +41,5 @@ class TestEmail < Test::Unit::TestCase
       assert_equal "sent email to joe@example.com", g.info
     end
   end
-  
+
 end

@@ -17,11 +17,11 @@ end
 
 module God
   module Contacts
-    class Jabber < Contact      
+    class Jabber < Contact
       class << self
         attr_accessor :settings, :format
       end
-      
+
       self.format = lambda do |message, priority, category, host|
         text  = "Message: #{message}\n"
         text += "Host: #{host}\n"         if host
@@ -29,13 +29,13 @@ module God
         text += "Category: #{category}\n" if category
         return text
       end
-      
+
       attr_accessor :jabber_id
-      
+
       def valid?
         valid = true
       end
-      
+
       def notify(message, time, priority, category, host)
         begin
           jabber_id = XMPP4R::JID::new "#{Jabber.settings[:jabber_id]}/God"
@@ -44,7 +44,7 @@ module God
           jabber_client.auth Jabber.settings[:password]
 
           body = Jabber.format.call message, priority, category, host
-          
+
           message = XMPP4R::Message::new self.jabber_id, body
           message.set_type :normal
           message.set_id '1'
@@ -55,11 +55,11 @@ module God
         rescue => e
           puts e.message
           puts e.backtrace.join("\n")
-          
+
           self.info = "failed to send jabber message to #{self.jabber_id}: #{e.message}"
         end
       end
     end
-    
+
   end
 end

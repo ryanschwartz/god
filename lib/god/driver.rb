@@ -3,7 +3,7 @@ module God
     include Comparable
 
     attr_accessor :at
-    
+
     # Instantiate a new TimedEvent that will be triggered after the specified delay
     #   +delay+ is the number of seconds from now at which to trigger
     #
@@ -23,13 +23,13 @@ module God
 
   class DriverEvent < TimedEvent
     attr_accessor :condition, :task
-    
+
     def initialize(delay, task, condition)
       super delay
       self.task = task
       self.condition = condition
     end
-    
+
     def handle_event
       @task.handle_poll(@condition)
     end
@@ -44,7 +44,7 @@ module God
       self.name = name
       self.args = args
     end
-    
+
     # Handle the next queued operation that was issued asynchronously
     #
     # Returns nothing
@@ -52,8 +52,8 @@ module God
       @task.send(@name, *@args)
     end
   end
-  
-  class DriverEventQueue 
+
+  class DriverEventQueue
     def initialize
       @shutdown = false
       @waiting = []
@@ -63,9 +63,9 @@ module God
       self.taint
     end
 
-    # 
+    #
     # Wake any sleeping threads after setting the sentinel
-    # 
+    #
     def shutdown
       @shutdown = true
       begin
@@ -103,8 +103,8 @@ module God
     alias shift pop
     alias deq pop
 
-    # 
-    # Add an event to the queue, wake any waiters if what we added needs to 
+    #
+    # Add an event to the queue, wake any waiters if what we added needs to
     # happen sooner than the next pending event
     #
     def push(event)
@@ -150,7 +150,7 @@ module God
 
   class Driver
     attr_reader :thread
-    
+
     # Instantiate a new Driver and start the scheduler loop to handle events
     #   +task+ is the Task this Driver belongs to
     #
@@ -158,7 +158,7 @@ module God
     def initialize(task)
       @task = task
       @events = God::DriverEventQueue.new
-      
+
       @thread = Thread.new do
         loop do
           begin
@@ -174,14 +174,14 @@ module God
         end
       end
     end
-    
+
     # Clear all events for this Driver
-    # 
+    #
     # Returns nothing
     def clear_events
       @events.clear
     end
-    
+
     # Queue an asynchronous message
     #   +name+ is the Symbol name of the operation
     #   +args+ is an optional Array of arguments
@@ -190,7 +190,7 @@ module God
     def message(name, args = [])
       @events.push(DriverOperation.new(@task, name, args))
     end
-    
+
     # Create and schedule a new DriverEvent
     #   +condition+ is the Condition
     #   +delay+ is the number of seconds to delay (default: interval defined in condition)
@@ -198,9 +198,9 @@ module God
     # Returns nothing
     def schedule(condition, delay = condition.interval)
       applog(nil, :debug, "driver schedule #{condition} in #{delay} seconds")
-      
+
       @events.push(DriverEvent.new(delay, @task, condition))
     end
   end # Driver
-  
+
 end # God

@@ -3,16 +3,16 @@ require 'net/smtp'
 
 module God
   module Contacts
-    
+
     class Email < Contact
       class << self
         attr_accessor :message_settings, :delivery_method, :server_settings, :sendmail_settings, :format
       end
-      
+
       self.message_settings = {:from => 'god@example.com'}
-      
+
       self.delivery_method = :smtp # or :sendmail
-      
+
       self.server_settings = {:address => 'localhost',
                               :port => 25}
                             # :domain
@@ -23,7 +23,7 @@ module God
       self.sendmail_settings = {:location  => '/usr/sbin/sendmail',
                                 :arguments => '-i -t'
       }
-      
+
       self.format = lambda do |name, email, message, time, priority, category, host|
         <<-EOF
 From: god <#{self.message_settings[:from]}>
@@ -38,15 +38,15 @@ Priority: #{priority}
 Category: #{category}
         EOF
       end
-      
+
       attr_accessor :email
-      
+
       def valid?
         valid = true
         valid &= complain("Attribute 'email' must be specified", self) if self.email.nil?
         valid
       end
-      
+
       def notify(message, time, priority, category, host)
         begin
           body = Email.format.call(self.name, self.email, message, time, priority, category, host)
@@ -59,7 +59,7 @@ Category: #{category}
           else
             raise "unknown delivery method: #{Email.delivery_method}"
           end
-          
+
           self.info = "sent email to #{self.email}"
         rescue => e
           applog(nil, :info, "failed to send email to #{self.email}: #{e.message}")
@@ -75,7 +75,7 @@ Category: #{category}
           args << Email.server_settings[:domain]
           args << Email.server_settings[:user_name]
           args << Email.server_settings[:password]
-          args << Email.server_settings[:authentication] 
+          args << Email.server_settings[:authentication]
         end
 
         Net::SMTP.start(*args) do |smtp|
